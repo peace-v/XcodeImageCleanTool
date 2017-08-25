@@ -1,0 +1,2 @@
+recursive-include xcode_imagecleantool/static *
+recursive-include xcode_imagecleantool/templates *

@@ -1,0 +1,36 @@
+.path {
+    text-align: left !important;
+}
+
+.main-div {
+    margin: 20px 50px;
+}
+
+.alert-div {
+    margin-bottom: 0;
+}
+
+.images-div {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.image-div {
+    margin-bottom: 20px;
+}
+
+.action {
+    text-align: right;
+}
+
+.image {
+    text-align: center;
+}
+
+.img-responsive {
+    margin:0 auto;
+}
+
+.imagepath {
+    margin-top: 10px;
+}
