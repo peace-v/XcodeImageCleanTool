@@ -12,7 +12,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 
-class ImageCleanTool:
+class XcodeImageCleanTool:
     def __init__(self, searchpath):
         if os.path.isdir(searchpath):
             if os.path.isabs(searchpath):
