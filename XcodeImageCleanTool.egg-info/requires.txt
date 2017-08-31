@@ -1,0 +1,3 @@
+Imagehash>=3.4
+Flask>=0.12.1
+Pillow>=4.1.0
