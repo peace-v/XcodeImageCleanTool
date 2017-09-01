@@ -2,14 +2,10 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import sys
 from collections import defaultdict
 
 import imagehash
 from PIL import Image
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 
 class XcodeImageCleanTool:
@@ -148,9 +144,10 @@ class XcodeImageCleanTool:
                     try:
                         with open(filepath, 'r') as fileData:
                             for data in fileData.readlines():
+                                unicode_data = data.decode('utf-8', 'ignore')
                                 for k, v in search_text.iteritems():
                                     for text in v:
-                                        if data.find(text) != -1:
+                                        if unicode_data.find(text) != -1:
                                             used_imgs.add(k)
                     except IOError:
                         print "could not find path :" % filepath
