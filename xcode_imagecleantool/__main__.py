@@ -43,13 +43,13 @@ class _ImageModel:
         if isinstance(location, unicode):
             self.location = '"%s"' % location
         else:
-            raise TypeError("%s is not a string" % location)
+            raise TypeError('%s is not a string' % location)
 
         if paths is not None:
             if isinstance(paths, list):
                 self.paths = paths
             else:
-                raise TypeError("%s is not a list" % paths)
+                raise TypeError('%s is not a list' % paths)
         else:
             self.paths = [location]
         self.paths = ','.join(self.paths)
@@ -67,7 +67,7 @@ def search_repeat_images():
         tool = XcodeImageCleanTool(searchpath)
         repeat_images = tool.find_repeat_images(ignorepath)
         repeat_images = map(
-            lambda x: _ImageModel(location=x.replace(searchpath, "http://127.0.0.1:" + str(port)), paths=[x]),
+            lambda x: _ImageModel(location=x.replace(searchpath, 'http://127.0.0.1:' + str(port)), paths=[x]),
             repeat_images)
 
         global search_path
@@ -84,7 +84,7 @@ def search_repeat_images():
     if projectpath:
         if httpd is not None:
             find_repeat_images(projectpath, ignorepath=ignorepaths)
-            return redirect(url_for('homepage'))
+            return redirect_to_homepage('没有重复图片')
         else:
             try:
                 thread = Thread(target=create_http_server, args=[projectpath])
@@ -92,7 +92,7 @@ def search_repeat_images():
                 time.sleep(2)
 
                 find_repeat_images(projectpath, ignorepath=ignorepaths)
-                return redirect(url_for('homepage'))
+                return redirect_to_homepage('没有重复图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
     else:
@@ -108,7 +108,7 @@ def search_similar_images():
         for item_array in similar_images_dic:
             similar_images.extend(item_array[0].values())
         similar_images = map(
-            lambda x: _ImageModel(location=x[0].replace(searchpath, "http://127.0.0.1:" + str(port)), paths=x),
+            lambda x: _ImageModel(location=x[0].replace(searchpath, 'http://127.0.0.1:' + str(port)), paths=x),
             similar_images)
 
         global search_path
@@ -125,7 +125,7 @@ def search_similar_images():
     if projectpath:
         if httpd is not None:
             find_similar_images(projectpath, ignorepath=ignorepaths)
-            return redirect(url_for('homepage'))
+            return redirect_to_homepage('没有相似图片')
         else:
             try:
                 thread = Thread(target=create_http_server, args=[projectpath])
@@ -133,7 +133,7 @@ def search_similar_images():
                 time.sleep(2)
 
                 find_similar_images(projectpath, ignorepath=ignorepaths)
-                return redirect(url_for('homepage'))
+                return redirect_to_homepage('没有相似图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
     else:
@@ -146,7 +146,7 @@ def search_unused_images():
         tool = XcodeImageCleanTool(searchpath)
         unused_images = tool.find_unused_images(ignorepath)
         unused_images = map(
-            lambda x: _ImageModel(location=x.replace(searchpath, "http://127.0.0.1:" + str(port)), paths=[x]),
+            lambda x: _ImageModel(location=x.replace(searchpath, 'http://127.0.0.1:' + str(port)), paths=[x]),
             unused_images)
 
         global search_path
@@ -163,7 +163,7 @@ def search_unused_images():
     if projectpath:
         if httpd is not None:
             find_unused_images(projectpath, ignorepath=ignorepaths)
-            return redirect(url_for('homepage'))
+            return redirect_to_homepage('没有未使用的图片')
         else:
             try:
                 thread = Thread(target=create_http_server, args=[projectpath])
@@ -171,7 +171,7 @@ def search_unused_images():
                 time.sleep(2)
 
                 find_unused_images(projectpath, ignorepath=ignorepaths)
-                return redirect(url_for('homepage'))
+                return redirect_to_homepage('没有未使用的图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
     else:
@@ -191,7 +191,7 @@ def delete_images():
         os.remove(item)
     for item in delete_image:
         images.remove(item)
-    return 'delete successfully'
+    return '删除成功'
 
 
 @app.errorhandler(_InvalidUsage)
@@ -203,7 +203,7 @@ def handle_invalid_usage(error):
 
 def get_open_port():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(("", 0))
+    s.bind(('', 0))
     s.listen(1)
     available_port = s.getsockname()[1]
     s.close()
@@ -230,12 +230,19 @@ def create_http_server(directory):
 
 def get_ignore_paths(ignorepathstring):
     ignorepaths = []
-    if ignorepathstring != "":
-        if "," in ignorepathstring:
-            ignorepaths = ignorepathstring.split(",")
+    if ignorepathstring != '':
+        if ',' in ignorepathstring:
+            ignorepaths = ignorepathstring.split(',')
         else:
             ignorepaths.append(ignorepathstring)
     return ignorepaths
+
+
+def redirect_to_homepage(hint):
+    if images:
+        return redirect(url_for('homepage'))
+    else:
+        raise _InvalidUsage(hint, status_code=204)
 
 
 if __name__ == '__main__':

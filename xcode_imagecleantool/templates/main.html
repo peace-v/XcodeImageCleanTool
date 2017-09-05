@@ -37,38 +37,38 @@
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default" id="search-repeat-images">查找重复图片</button>
                 <button type="button" class="btn btn-default" id="search-similar-images">查找相似图片</button>
-                <button type="button" class="btn btn-default" id="search-unused-images">查找没有使用的图片</button>
+                <button type="button" class="btn btn-default" id="search-unused-images">查找未使用的图片</button>
             </div>
             <div class="alert alert-warning alert-div" role="alert">注意：如需使用查找相似图片的功能，需要先查找重复图片并处理完毕之后才能查找相似图片，否则可能存在结果不准确的问题。</div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-                    <span class="sr-only"></span>
-                </div>
+            <div class="searching">
+                <p class="text-center">正在查找...</p>
             </div>
             {%- if images|length > 0 -%}
-            <div class="row images-div">
-                {% for item in images %}
-                <div class="col-sm-2 col-md-2 col-lg-2 image-div">
-                    <div class="row">
-                        <div class="col-sm-10 col-md-10 col-lg-10 image">
-                            <img class="img-responsive" src={{item.location|safe}}>
+            <div class="search-results">
+                <div class="row images-div">
+                    {% for item in images %}
+                    <div class="col-sm-2 col-md-2 col-lg-2 image-div">
+                        <div class="row">
+                            <div class="col-sm-10 col-md-10 col-lg-10 image">
+                                <img class="img-responsive" src={{item.location|safe}}>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <input type="checkbox" name="cbx" id={{loop.index0}}>
+                            </div>
                         </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
-                            <input type="checkbox" name="cbx" id={{loop.index0}}>
+                        <div class="row">
+                            <div class="col-sm-10 col-md-10 col-lg-10 imagepath">
+                                <textarea class="form-control" rows="2">{{item.paths}}</textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-10 col-md-10 col-lg-10 imagepath">
-                            <textarea class="form-control" rows="2">{{item.paths}}</textarea>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-            <div class="row">
-                <div class="col-sm-2 col-md-2 col-lg-2 col-sm-offset-10 col-md-offset-10 col-lg-offset-10 action">
-                    <button type="button" class="btn btn-default" id="choose-all">全选</button>
-                    <button type="button" class="btn btn-danger" id="delete">删除</button>
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 col-lg-2 col-sm-offset-10 col-md-offset-10 col-lg-offset-10 action">
+                        <button type="button" class="btn btn-default" id="choose-all">全选</button>
+                        <button type="button" class="btn btn-danger" id="delete">删除</button>
+                    </div>
                 </div>
             </div>
             {% endif %}

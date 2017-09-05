@@ -34,3 +34,8 @@
 .imagepath {
     margin-top: 10px;
 }
+
+.searching {
+    margin-top: 50px;
+    display: none;
+}

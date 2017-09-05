@@ -6,7 +6,8 @@ $(document).ready(function() {
     $(".image").height($(".image").width());
 
     $('#search-repeat-images').on('click', function() {
-        $(".progress-bar").addClass("active");
+        $(".search-results").remove()
+        $(".searching").css("display", "block");
         var projectPath = $('#project-path').val();
         var ignorePaths = $('#ignore-path').val();
         $.get("/searchRepeatImages",{projectPath:projectPath, ignorePaths:ignorePaths})
@@ -14,16 +15,17 @@ $(document).ready(function() {
             window.location.reload();
          })
         .error(function(error) {
-            $(".progress-bar").removeClass("active");
+            $(".searching").css("display", "none");
             alert(error.responseJSON.message);
          })
         .complete(function() {
-            $(".progress-bar").removeClass("active");
+            $(".searching").css("display", "none");
          });
     });
 
     $('#search-similar-images').on('click', function() {
-        $(".progress-bar").addClass("active");
+        $(".search-results").remove()
+        $(".searching").css("display", "block");
         var projectPath = $('#project-path').val();
         var ignorePaths = $('#ignore-path').val();
         $.get("/searchSimilarImages",{projectPath:projectPath, ignorePaths:ignorePaths})
@@ -31,16 +33,17 @@ $(document).ready(function() {
             window.location.reload();
          })
         .error(function(error) {
-            $(".progress-bar").removeClass("active");
+            $(".searching").css("display", "none");
             alert(error.responseJSON.message);
          })
         .complete(function() {
-            $(".progress-bar").removeClass("active");
+            $(".searching").css("display", "none");
          });
     });
 
-        $('#search-unused-images').on('click', function() {
-        $(".progress-bar").addClass("active");
+    $('#search-unused-images').on('click', function() {
+        $(".search-results").remove()
+        $(".searching").css("display", "block");
         var projectPath = $('#project-path').val();
         var ignorePaths = $('#ignore-path').val();
         $.get("/searchUnusedImages",{projectPath:projectPath, ignorePaths:ignorePaths})
@@ -48,11 +51,11 @@ $(document).ready(function() {
             window.location.reload();
          })
         .error(function(error) {
-            $(".progress-bar").removeClass("active");
+            $(".searching").css("display", "none");
             alert(error.responseJSON.message);
          })
         .complete(function() {
-            $(".progress-bar").removeClass("active");
+            $(".searching").css("display", "none");
          });
     });
 

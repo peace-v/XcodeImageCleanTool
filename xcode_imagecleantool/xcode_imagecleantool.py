@@ -19,9 +19,9 @@ class XcodeImageCleanTool:
                 self.similar_images = {}
                 self.unused_images = []
             else:
-                raise NameError("%s is not a absolute path" % searchpath)
+                raise NameError('%s is not a absolute path' % searchpath)
         else:
-            raise NameError("%s is not a directory" % searchpath)
+            raise NameError('%s is not a directory' % searchpath)
 
     def _find_all_images(self, ignorepaths=None):
         def appendimage(files):
@@ -39,9 +39,9 @@ class XcodeImageCleanTool:
                             for dirpath, dirnames, filenames in os.walk(path):
                                 ignore_paths.append(dirpath)
                         else:
-                            raise NameError("%s is not a absolute path" % path)
+                            raise NameError('%s is not a absolute path' % path)
                     else:
-                        raise NameError("%s is not a directory" % path)
+                        raise NameError('%s is not a directory' % path)
             return ignore_paths
 
         all_ignore_paths = find_all_ignore_paths(ignorepaths)
@@ -63,7 +63,7 @@ class XcodeImageCleanTool:
                     dhash = imagehash.dhash(img)
                     self.dhash_data[dhash] = self.dhash_data.get(dhash, []) + [path]
             except IOError:
-                print "could not find image in", path
+                print 'could not find image in', path
 
     def find_repeat_images(self, ignorepaths=None):
         # 图片相似且名称一样
@@ -132,7 +132,7 @@ class XcodeImageCleanTool:
 
         search_text = defaultdict(list)
         for image in image_names.keys():
-            name_without_postfix = image.split(".")[0]
+            name_without_postfix = image.split('.')[0]
             search_text[image].append('"%s"' % image)
             search_text[image].append('"%s"' % name_without_postfix)
 
@@ -150,7 +150,7 @@ class XcodeImageCleanTool:
                                         if unicode_data.find(text) != -1:
                                             used_imgs.add(k)
                     except IOError:
-                        print "could not find path :" % filepath
+                        print 'could not find path :' % filepath
 
         for item in used_imgs:
             if item in image_names.keys():
