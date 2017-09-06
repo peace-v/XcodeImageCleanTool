@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import sys
 import socket
 import SimpleHTTPServer
 import SocketServer
@@ -208,11 +209,22 @@ def delete_images():
     return '删除成功'
 
 
-@app.route('/openFile')
-def openfile():
-    filepath = request.args.get('path')
-    command = ('open %s' % filepath).encode('utf-8')
-    os.system(command)
+# @app.route('/openFile')
+# def openfile():
+#     filepath = request.args.get('path')
+#     command = ('open %s' % filepath).encode('utf-8')
+#     os.system(command)
+#     return ''
+
+
+@app.route('/export')
+def export():
+    text = request.args.get('results')
+    dirname, _ = os.path.split(os.path.abspath(sys.argv[0]))
+    filepath = os.path.join(dirname, 'results.txt')
+    with open(filepath, 'w') as f:
+        f.write(text)
+    openfile(filepath)
     return ''
 
 
@@ -265,6 +277,11 @@ def redirect_to_homepage(hint):
         return redirect(url_for('homepage'))
     else:
         raise _InvalidUsage(hint, status_code=204)
+
+
+def openfile(path):
+    command = ('open %s' % path)
+    os.system(command)
 
 
 if __name__ == '__main__':

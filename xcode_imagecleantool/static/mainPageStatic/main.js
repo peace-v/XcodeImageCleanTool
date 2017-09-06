@@ -96,9 +96,24 @@ $(document).ready(function() {
          });
     });
 
+    $('#export').on('click', function() {
+        var results = '';
+        $('li').each(function(){
+            results = results + $(this).text() + '\n';
+        });
+        $.get('/export',{results:results})
+        .success(function() {
+         })
+        .error(function(error) {
+            alert(error.responseJSON.message);
+         })
+        .complete(function() {
+         });
+    });
+
     $(function(){
         $('a').click(function(){
-            openFile(this.text);
+            openFile($(this).text());
         });
     });
 
