@@ -9,19 +9,24 @@ from PIL import Image
 
 
 class XcodeImageCleanTool:
-    def __init__(self, searchpath):
-        if os.path.isdir(searchpath):
-            if os.path.isabs(searchpath):
-                self.search_path = searchpath
-                self.image_paths = []
-                self.dhash_data = {}
-                self.repeat_images = []
-                self.similar_images = {}
-                self.unused_images = []
-            else:
-                raise NameError('%s is not a absolute path' % searchpath)
-        else:
+    def __init__(self, searchpath, imagepath):
+        if not os.path.isdir(searchpath):
             raise NameError('%s is not a directory' % searchpath)
+        if not os.path.isabs(searchpath):
+            raise NameError('%s is not a absolute path' % searchpath)
+        if imagepath:
+            if not os.path.isdir(imagepath):
+                raise NameError('%s is not a directory' % imagepath)
+            if not os.path.isabs(imagepath):
+                raise NameError('%s is not a absolute path' % imagepath)
+
+        self.search_path = searchpath
+        self.search_image_path = imagepath
+        self.image_paths = []
+        self.dhash_data = {}
+        self.repeat_images = []
+        self.similar_images = {}
+        self.unused_images = []
 
     def _find_all_images(self, ignorepaths=None):
         def appendimage(files):
@@ -45,7 +50,8 @@ class XcodeImageCleanTool:
             return ignore_paths
 
         all_ignore_paths = find_all_ignore_paths(ignorepaths)
-        for dirpath, dirnames, filenames in os.walk(self.search_path):
+        for dirpath, dirnames, filenames in os.walk(
+                self.search_image_path if self.search_image_path else self.search_path):
             # 忽略appicon和launchimage等路径
             if any(s in dirpath for s in ('.appiconset', '.brandassets', '.complicationset', \
                                           '.gcdashboardimage', '.iconset', '.launchimage', \

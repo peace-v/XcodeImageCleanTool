@@ -33,9 +33,24 @@
 
 .imagepath {
     margin-top: 10px;
+    border:1px solid #CCCCCC;
+    border-radius:4px;
+    height: 80px;
+    overflow: scroll;
 }
 
 .searching {
     margin-top: 50px;
     display: none;
 }
+
+a {
+    word-wrap: break-word;
+}
+
+
+ol {
+    padding-left: 8px;
+}
+
+

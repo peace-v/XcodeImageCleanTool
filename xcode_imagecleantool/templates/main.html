@@ -22,9 +22,15 @@
         <div class="main-div">
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-sm-3 col-md-3 col-lg-3 control-label path">请填写项目的绝对路径(无需转义):</label>
+                    <label class="col-sm-3 col-md-3 col-lg-3 control-label path">请填写项目的绝对路径(路径无需转义):</label>
                     <div class="col-sm-9 col-md-9 col-lg-9">
                         <input type="text" class="form-control" id="project-path" value={{search_path}}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 col-md-3 col-lg-3 control-label path">请填写图片资源的绝对路径:</label>
+                    <div class="col-sm-9 col-md-9 col-lg-9">
+                        <input type="text" class="form-control" id="image-path" value={{image_path}}>
                     </div>
                 </div>
                 <div class="form-group">
@@ -58,7 +64,12 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-10 col-md-10 col-lg-10 imagepath">
-                                <textarea class="form-control" rows="2">{{item.paths}}</textarea>
+                                <ol>
+                                    {% for path in item.paths %}
+                                    <!--<li><a href='javascript:void(0);' onclick="openFile()">{{path}}</a></li>-->
+                                    <li>{{path}}</li>
+                                    {% endfor %}
+                                </ol>
                             </div>
                         </div>
                     </div>

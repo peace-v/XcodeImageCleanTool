@@ -12,11 +12,12 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from xcode_imagecleantool import XcodeImageCleanTool
 
 app = Flask(__name__)
-search_path = ""
-ignore_path = ""
+search_path = ''
+image_path = ''
+ignore_path = ''
 images = []
 httpd = None
-port = ""
+port = ''
 
 
 class _InvalidUsage(Exception):
@@ -52,38 +53,45 @@ class _ImageModel:
                 raise TypeError('%s is not a list' % paths)
         else:
             self.paths = [location]
-        self.paths = ','.join(self.paths)
+            # self.paths = ','.join(self.paths)
 
 
 @app.route('/')
 def homepage():
     # TODO:refresh
-    return render_template('main.html', search_path=search_path, ignore_path=ignore_path, images=images)
+    return render_template('main.html', \
+                           search_path=search_path if search_path else '',\
+                           image_path=image_path if image_path else '', \
+                           ignore_path=ignore_path if ignore_path else '',\
+                           images=images)
 
 
 @app.route('/searchRepeatImages')
 def search_repeat_images():
-    def find_repeat_images(searchpath, ignorepath):
-        tool = XcodeImageCleanTool(searchpath)
+    def find_repeat_images(searchpath, imagepath, ignorepath):
+        tool = XcodeImageCleanTool(searchpath, imagepath=imagepath)
         repeat_images = tool.find_repeat_images(ignorepath)
         repeat_images = map(
             lambda x: _ImageModel(location=x.replace(searchpath, 'http://127.0.0.1:' + str(port)), paths=[x]),
             repeat_images)
 
         global search_path
+        global image_path
         global ignore_path
         global images
         search_path = searchpath
+        image_path = imagepath
         ignore_path = ignorepathstring
         images = repeat_images
 
     projectpath = request.args.get('projectPath')
+    search_imagepath = request.args.get('imagePath')
     ignorepathstring = request.args.get('ignorePaths')
     ignorepaths = get_ignore_paths(ignorepathstring)
 
     if projectpath:
         if httpd is not None:
-            find_repeat_images(projectpath, ignorepath=ignorepaths)
+            find_repeat_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
             return redirect_to_homepage('没有重复图片')
         else:
             try:
@@ -91,7 +99,7 @@ def search_repeat_images():
                 thread.start()
                 time.sleep(2)
 
-                find_repeat_images(projectpath, ignorepath=ignorepaths)
+                find_repeat_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
                 return redirect_to_homepage('没有重复图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
@@ -101,8 +109,8 @@ def search_repeat_images():
 
 @app.route('/searchSimilarImages')
 def search_similar_images():
-    def find_similar_images(searchpath, ignorepath):
-        tool = XcodeImageCleanTool(searchpath)
+    def find_similar_images(searchpath, imagepath, ignorepath):
+        tool = XcodeImageCleanTool(searchpath, imagepath=imagepath)
         similar_images_dic = tool.find_similar_images(ignorepath).values()
         similar_images = []
         for item_array in similar_images_dic:
@@ -112,19 +120,22 @@ def search_similar_images():
             similar_images)
 
         global search_path
+        global image_path
         global ignore_path
         global images
         search_path = searchpath
+        image_path = imagepath
         ignore_path = ignorepathstring
         images = similar_images
 
     projectpath = request.args.get('projectPath')
+    search_imagepath = request.args.get('imagePath')
     ignorepathstring = request.args.get('ignorePaths')
     ignorepaths = get_ignore_paths(ignorepathstring)
 
     if projectpath:
         if httpd is not None:
-            find_similar_images(projectpath, ignorepath=ignorepaths)
+            find_similar_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
             return redirect_to_homepage('没有相似图片')
         else:
             try:
@@ -132,7 +143,7 @@ def search_similar_images():
                 thread.start()
                 time.sleep(2)
 
-                find_similar_images(projectpath, ignorepath=ignorepaths)
+                find_similar_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
                 return redirect_to_homepage('没有相似图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
@@ -142,27 +153,30 @@ def search_similar_images():
 
 @app.route('/searchUnusedImages')
 def search_unused_images():
-    def find_unused_images(searchpath, ignorepath):
-        tool = XcodeImageCleanTool(searchpath)
+    def find_unused_images(searchpath, imagepath, ignorepath):
+        tool = XcodeImageCleanTool(searchpath, imagepath=imagepath)
         unused_images = tool.find_unused_images(ignorepath)
         unused_images = map(
             lambda x: _ImageModel(location=x.replace(searchpath, 'http://127.0.0.1:' + str(port)), paths=[x]),
             unused_images)
 
         global search_path
+        global image_path
         global ignore_path
         global images
         search_path = searchpath
+        image_path = imagepath
         ignore_path = ignorepathstring
         images = unused_images
 
     projectpath = request.args.get('projectPath')
+    search_imagepath = request.args.get('imagePath')
     ignorepathstring = request.args.get('ignorePaths')
     ignorepaths = get_ignore_paths(ignorepathstring)
 
     if projectpath:
         if httpd is not None:
-            find_unused_images(projectpath, ignorepath=ignorepaths)
+            find_unused_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
             return redirect_to_homepage('没有未使用的图片')
         else:
             try:
@@ -170,7 +184,7 @@ def search_unused_images():
                 thread.start()
                 time.sleep(2)
 
-                find_unused_images(projectpath, ignorepath=ignorepaths)
+                find_unused_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
                 return redirect_to_homepage('没有未使用的图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
@@ -192,6 +206,14 @@ def delete_images():
     for item in delete_image:
         images.remove(item)
     return '删除成功'
+
+
+@app.route('/openFile')
+def openfile():
+    filepath = request.args.get('path')
+    command = ('open %s' % filepath).encode('utf-8')
+    os.system(command)
+    return ''
 
 
 @app.errorhandler(_InvalidUsage)
