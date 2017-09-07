@@ -76,5 +76,6 @@ XcodeImageCleanTool是一款清理Xcode项目中未使用，重复和相似的�
 
 <h2 id="other">其他</h2>
 
-简书文章地址：<http://www.jianshu.com/u/70dc539e3bfe>。
+简书文章地址：<http://www.jianshu.com/p/485ef4fecaec>。
+
 如果有小伙伴安装使用中遇到了问题，能解决优化现有的问题或代码，或者有好的建议等，都可以通过邮件联系molayyu@gmail.com。
