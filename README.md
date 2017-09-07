@@ -14,13 +14,12 @@
 XcodeImageCleanTool是一款清理Xcode项目中未使用，重复和相似的图片资源的脚本工具，通过网页图形界面进行操作。
 
 <h2 id="environment">安装环境</h2>
-推荐用Homebrew安装Python2和Python3，而不是直接使用系统自带的Python来运行。如何安装可以看这篇文章<https://stringpiggy.hpd.io/mac-osx-python3-dual-install/>。终端输入python / pip是系统自带的，python2 / pip2是下载的Python2，python3 / pip3 是下载的Python3。
-
+推荐用Homebrew安装Python2和Python3，而不是直接使用系统自带的Python来运行。如何安装可以看这篇文章<https://stringpiggy.hpd.io/mac-osx-python3-dual-install/>。终端输入python / pip是系统自带的，python2 / pip2是下载的Python2，python3 / pip3 是下载的Python3。 
 
 用setup.py安装依赖插件的时候可能会因为网络原因导致部分插件一直下载不下来，比如Pillow，这个时候可以先用pip安装相关依赖，或去官网下载相应的whl文件安装在本地，再运行setup.py。如果其他库也有这个问题都可以用这个办法解决。
 
 <h2 id="installation">安装说明</h2>
-下载zip文件，解压进入dist文件夹，解压压缩文件，终端cd进入解压后的文件夹路径，输入命令`python2 setup.py install` 或`python setup.py install`，成功后输入`python2 -m xcode_imagecleantool` 或`python -m xcode_imagecleantool`即可运行。
+下载zip文件，解压进入dist文件夹，解压压缩文件，终端cd进入解压后的文件夹路径，输入命令`python2 setup.py install` 或`python setup.py install`，成功后输入`python2 -m xcode_imagecleantool` 或`python -m xcode_imagecleantool`即可运行。  
 
 ![](http://upload-images.jianshu.io/upload_images/205216-e89c4e5220184975.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
   
@@ -73,4 +72,4 @@ XcodeImageCleanTool是一款清理Xcode项目中未使用，重复和相似的�
 5. 遍历工程下所有后缀为'.h', '.m', '.swift', '.mm', '.cpp', '.xib', '.storyboard', '.plist', '.html', '.css'的文件，搜索是否有`"图片名称"`或`"图片名称.后缀"`的代码，如果有则图片已使用。
 
 <h2 id="other">其他</h2>
-如果有小伙伴安装使用中遇到了问题，能解决优化现有的问题或代码，或者有好的建议等，都可以通过邮件联系molayyu@gmail.com。
+如果有小伙伴安装使用中遇到了问题，能解决优化现有的问题或代码，或者有好的建议等，都可以通过邮件联系，molayyu@gmail.com。
