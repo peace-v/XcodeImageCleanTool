@@ -149,12 +149,17 @@ class XcodeImageCleanTool:
                     filepath = os.path.join(dirpath, item)
                     try:
                         with open(filepath, 'r') as fileData:
+                            print 'searching', f
                             for data in fileData.readlines():
                                 unicode_data = data.decode('utf-8', 'ignore')
+                                found_k = []
                                 for k, v in search_text.iteritems():
                                     for text in v:
                                         if unicode_data.find(text) != -1:
                                             used_imgs.add(k)
+                                            found_k.append(k)
+                                for item in found_k:
+                                    del search_text[item]
                     except IOError:
                         print 'could not find path :' % filepath
 

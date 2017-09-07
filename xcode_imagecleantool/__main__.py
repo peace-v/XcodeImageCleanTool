@@ -61,9 +61,9 @@ class _ImageModel:
 def homepage():
     # TODO:refresh
     return render_template('main.html', \
-                           search_path=search_path if search_path else '',\
+                           search_path=search_path if search_path else '', \
                            image_path=image_path if image_path else '', \
-                           ignore_path=ignore_path if ignore_path else '',\
+                           ignore_path=ignore_path if ignore_path else '', \
                            images=images)
 
 
@@ -88,20 +88,20 @@ def search_repeat_images():
     projectpath = request.args.get('projectPath')
     search_imagepath = request.args.get('imagePath')
     ignorepathstring = request.args.get('ignorePaths')
-    ignorepaths = get_ignore_paths(ignorepathstring)
+    ignorepaths = _get_ignore_paths(ignorepathstring)
 
     if projectpath:
         if httpd is not None:
             find_repeat_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
-            return redirect_to_homepage('没有重复图片')
+            return _redirect_to_homepage('没有重复图片')
         else:
             try:
-                thread = Thread(target=create_http_server, args=[projectpath])
+                thread = Thread(target=_create_http_server, args=[projectpath])
                 thread.start()
                 time.sleep(2)
 
                 find_repeat_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
-                return redirect_to_homepage('没有重复图片')
+                return _redirect_to_homepage('没有重复图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
     else:
@@ -132,20 +132,20 @@ def search_similar_images():
     projectpath = request.args.get('projectPath')
     search_imagepath = request.args.get('imagePath')
     ignorepathstring = request.args.get('ignorePaths')
-    ignorepaths = get_ignore_paths(ignorepathstring)
+    ignorepaths = _get_ignore_paths(ignorepathstring)
 
     if projectpath:
         if httpd is not None:
             find_similar_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
-            return redirect_to_homepage('没有相似图片')
+            return _redirect_to_homepage('没有相似图片')
         else:
             try:
-                thread = Thread(target=create_http_server, args=[projectpath])
+                thread = Thread(target=_create_http_server, args=[projectpath])
                 thread.start()
                 time.sleep(2)
 
                 find_similar_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
-                return redirect_to_homepage('没有相似图片')
+                return _redirect_to_homepage('没有相似图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
     else:
@@ -173,20 +173,20 @@ def search_unused_images():
     projectpath = request.args.get('projectPath')
     search_imagepath = request.args.get('imagePath')
     ignorepathstring = request.args.get('ignorePaths')
-    ignorepaths = get_ignore_paths(ignorepathstring)
+    ignorepaths = _get_ignore_paths(ignorepathstring)
 
     if projectpath:
         if httpd is not None:
             find_unused_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
-            return redirect_to_homepage('没有未使用的图片')
+            return _redirect_to_homepage('没有未使用的图片')
         else:
             try:
-                thread = Thread(target=create_http_server, args=[projectpath])
+                thread = Thread(target=_create_http_server, args=[projectpath])
                 thread.start()
                 time.sleep(2)
 
                 find_unused_images(projectpath, imagepath=search_imagepath, ignorepath=ignorepaths)
-                return redirect_to_homepage('没有未使用的图片')
+                return _redirect_to_homepage('没有未使用的图片')
             except Exception, e:
                 raise _InvalidUsage(e.message, status_code=400)
     else:
@@ -200,7 +200,7 @@ def delete_images():
     delete_image = []
     for item in index:
         if item < len(images):
-            delete_image_paths.extend(images[item].paths.split(','))
+            delete_image_paths.extend(images[item].paths)
             delete_image.append(images[item])
     for item in delete_image_paths:
         os.remove(item)
@@ -224,7 +224,7 @@ def export():
     filepath = os.path.join(dirname, 'results.txt')
     with open(filepath, 'w') as f:
         f.write(text)
-    openfile(filepath)
+    _openfile(filepath)
     return ''
 
 
@@ -235,7 +235,7 @@ def handle_invalid_usage(error):
     return response
 
 
-def get_open_port():
+def _get_open_port():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(('', 0))
     s.listen(1)
@@ -244,12 +244,12 @@ def get_open_port():
     return available_port
 
 
-def create_http_server(directory):
+def _create_http_server(directory):
     try:
         global httpd
         if httpd is None:
             global port
-            port = get_open_port()
+            port = _get_open_port()
             httpd = SocketServer.TCPServer(('', port), SimpleHTTPServer.SimpleHTTPRequestHandler)
             print 'Serving on port', port
             current_dir = os.getcwd()
@@ -262,7 +262,7 @@ def create_http_server(directory):
         print 'Port', port, 'already in use'
 
 
-def get_ignore_paths(ignorepathstring):
+def _get_ignore_paths(ignorepathstring):
     ignorepaths = []
     if ignorepathstring != '':
         if ',' in ignorepathstring:
@@ -272,14 +272,14 @@ def get_ignore_paths(ignorepathstring):
     return ignorepaths
 
 
-def redirect_to_homepage(hint):
+def _redirect_to_homepage(hint):
     if images:
         return redirect(url_for('homepage'))
     else:
         raise _InvalidUsage(hint, status_code=204)
 
 
-def openfile(path):
+def _openfile(path):
     command = ('open %s' % path)
     os.system(command)
 
