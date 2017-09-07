@@ -209,12 +209,11 @@ def delete_images():
     return '删除成功'
 
 
-# @app.route('/openFile')
-# def openfile():
-#     filepath = request.args.get('path')
-#     command = ('open %s' % filepath).encode('utf-8')
-#     os.system(command)
-#     return ''
+@app.route('/openFile')
+def openfile():
+    filepath = request.args.get('path').encode('utf-8')
+    _openfile(filepath)
+    return ''
 
 
 @app.route('/export')
