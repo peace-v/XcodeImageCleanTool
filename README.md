@@ -32,9 +32,9 @@ XcodeImageCleanTool是一款清理Xcode项目中未使用，重复和相似的�
 
 <h2 id="usage">使用说明</h2>
 
-<img src="http://upload-images.jianshu.io/upload_images/205216-0e2ed14c58991dd1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width = "60%"/>
+<img src="http://upload-images.jianshu.io/upload_images/205216-728e5808c6823d86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width = "60%"/>
 
-**项目的绝对路径（必填项）**：需要搜索的工程所在的路径，如下图。如果路径包含空格也无需转义，直接填写，下同。
+**项目的绝对路径（必填项）**：需要搜索的工程所在的路径，如下图。路径无空格，下同。
 
 <img src="http://upload-images.jianshu.io/upload_images/205216-6c2988faf5e36198.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" width = "60%"/>
 
