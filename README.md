@@ -12,7 +12,7 @@
 
 <h2 id="description">概述</h2>
 
-XcodeImageCleanTool是一款清理Xcode项目中未使用，重复和相似的图片资源的脚本工具，通过网页图形界面进行操作。
+XcodeImageCleanTool是一款清理iOS项目中未使用，重复和相似的图片资源的脚本工具，通过网页图形界面进行操作。
 
 <h2 id="environment">安装环境</h2>
 
